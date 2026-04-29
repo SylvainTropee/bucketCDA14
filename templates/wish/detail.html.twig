@@ -2,5 +2,15 @@
 
 {% block body %}
     <h2>Detail of a wish</h2>
+    <section>
+        <article>
+            <div>
+                <p>{{ wish.title }}</p>
+                <p>Created by {{ wish.author }} on {{ wish.dateCreated | date('Y-m-d') }}</p>
+                <p>{{ wish.description }}</p>
+            </div>
+        </article>
+    </section>
+
 {% endblock %}
 

@@ -8,6 +8,11 @@
                 <p>{{ wish.title }}</p>
                 <p>Created by {{ wish.author }} on {{ wish.dateCreated | date('Y-m-d') }}</p>
                 <p>{{ wish.description }}</p>
+                <p><a href="{{ path('wish_delete', {'id' : wish.id}) }}">
+                        <button>Delete</button>
+                    </a><a href="{{ path('wish_update', {'id': wish.id}) }}">
+                        <button>Update</button>
+                    </a></p>
             </div>
         </article>
     </section>

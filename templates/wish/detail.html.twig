@@ -6,6 +6,7 @@
         <article>
             <div>
                 <p>{{ wish.title }}</p>
+                <p>[{{ wish.category.name }}]</p>
                 <p>Created by {{ wish.author }} on {{ wish.dateCreated | date('Y-m-d') }}</p>
                 <p>{{ wish.description }}</p>
                 <p><a href="{{ path('wish_delete', {'id' : wish.id}) }}">

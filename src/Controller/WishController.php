@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/wish', name: 'wish_')]
 final class WishController extends AbstractController
@@ -42,6 +43,7 @@ final class WishController extends AbstractController
 
     #[Route('/create', name: 'create')]
     #[Route('/{id}/update', name: 'update', requirements: ['id' => '\d+'])]
+    #[IsGranted("ROLE_USER")]
     public function createOrUpdate(
         WishRepository         $wishRepository,
         Request                $request,
@@ -55,12 +57,18 @@ final class WishController extends AbstractController
             if (!$wish) {
                 throw $this->createNotFoundException("Wish not found !");
             }
+
+            $this->denyAccessUnlessGranted("WISH_EDIT", $wish, "Ooops ! You can't update this wish");
+
         }
         $wishForm = $this->createForm(WishType::class, $wish);
 
         $wishForm->handleRequest($request);
 
         if ($wishForm->isSubmitted() && $wishForm->isValid()) {
+
+            $wish->setUser($this->getUser());
+
             $entityManager->persist($wish);
             $entityManager->flush();
             $this->addFlash('success', 'Idea sucessfully ' . (!$id ? 'added !' : 'updated !'));
@@ -72,13 +80,16 @@ final class WishController extends AbstractController
     }
 
     #[Route('/{id}/delete', name: 'delete', requirements: ['id' => '\d+'])]
+    #[IsGranted("WISH_DELETE", 'wish')]
     public function delete(
-        int                    $id,
+        Wish                   $wish,
         WishRepository         $wishRepository,
         EntityManagerInterface $entityManager
     ): Response
     {
-        $wish = $wishRepository->find($id);
+
+        // $wish = $wishRepository->find($id);
+        //$this->isGranted("WISH_DELETE", $wish);
 
         $entityManager->remove($wish);
         $entityManager->flush();

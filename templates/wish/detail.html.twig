@@ -7,13 +7,20 @@
             <div>
                 <p>{{ wish.title }}</p>
                 <p>[{{ wish.category.name }}]</p>
-                <p>Created by {{ wish.author }} on {{ wish.dateCreated | date('Y-m-d') }}</p>
+                <p>Created by {{ wish.user.userIdentifier }} on {{ wish.dateCreated | date('Y-m-d') }}</p>
                 <p>{{ wish.description }}</p>
-                <p><a href="{{ path('wish_delete', {'id' : wish.id}) }}">
-                        <button>Delete</button>
-                    </a><a href="{{ path('wish_update', {'id': wish.id}) }}">
-                        <button>Update</button>
-                    </a></p>
+                <p>
+                    {% if is_granted("WISH_DELETE", wish) %}
+                        <a href="{{ path('wish_delete', {'id' : wish.id}) }}">
+                            <button>Delete</button>
+                        </a>
+                    {% endif %}
+                    {% if is_granted("WISH_EDIT", wish) %}
+                        <a href="{{ path('wish_update', {'id': wish.id}) }}">
+                            <button>Update</button>
+                        </a>
+                    {% endif %}
+                </p>
             </div>
         </article>
     </section>

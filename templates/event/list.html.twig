@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h2>Events !</h2>
+
+    {{ form_start(searchEventForm) }}
+    {{ form_widget(searchEventForm) }}
+    <button>Search !</button>
+    {{ form_end(searchEventForm) }}
+
+    {% for event in events %}
+
+        {% if event.fields.image is defined %}
+            <div>
+                <img src="{{ event.fields.image }}" alt="">
+            </div>
+        {% endif %}
+        {% if event.fields.title_fr is defined %}
+            <div>{{ event.fields.title_fr }}</div>
+        {% endif %}
+        <div>{{ event.fields.daterange_fr }}</div>
+        {% if event.fields.description_fr is defined %}
+            <div>{{ event.fields.description_fr }}</div>
+        {% endif %}
+        <div>{{ event.fields.location_name }}</div>
+        <div>{{ event.fields.location_address }}</div>
+    {% endfor %}
+
+{% endblock %}
+
+{% block title %}
+
+
+{% endblock %}
+

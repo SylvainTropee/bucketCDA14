@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Validator\Constraints\Date;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 final class EventController extends AbstractController
@@ -21,6 +22,8 @@ final class EventController extends AbstractController
         $searchEvent = new SearchEvent();
         $searchEventForm = $this->createForm(SearchEventType::class, $searchEvent);
         $searchEventForm->handleRequest($request);
+
+        $searchEvent->setStartDate(new \DateTime());
 
         $events = $eventService->getEvents($searchEvent);
 
